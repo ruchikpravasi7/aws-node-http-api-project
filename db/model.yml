@@ -1,23 +1,27 @@
 Resources:
-  UserTable:
+  DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: UserTable
-      BillingMode: PAY_PER_REQUEST
+      TableName: DynamoDBTable
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: taskId
+          AttributeType: S
+        - AttributeName: userId
           AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: taskId
           KeyType: HASH
-  TaskTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: TaskTable
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          Projection:
+            NonKeyAttributes: [task]
+            ProjectionType: INCLUDE

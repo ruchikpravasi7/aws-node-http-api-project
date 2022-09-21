@@ -14,10 +14,16 @@ provider:
         - arn:aws:dynamodb:us-east-1:145612666382:table/TaskTable
 functions:
   addTask:
-    handler: src/addTodo.handler
+    handler: src/addTodo.addTodo
     events:
       - httpApi:
           path: /addTask
+          method: post
+  TodoByUserId:
+    handler: src/addTodo.TodoByUserId
+    events:
+      - httpApi:
+          path: /tasks/{userId}
           method: post
   getTasks:
     handler: src/fetchTodo.handler
